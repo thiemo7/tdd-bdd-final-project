@@ -113,6 +113,13 @@ class TestProductRoutes(TestCase):
     # ----------------------------------------------------------
     def test_create_product(self):
         """It should Create a new Product"""
+        # get the id of a product
+        test_product = self._create_products(1)[0]
+        response = self.client.get(f"{BASE_URL}/{test_product.id}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(data["name"], test_product.name)
+
         test_product = ProductFactory()
         logging.debug("Test Product: %s", test_product.serialize())
         response = self.client.post(BASE_URL, json=test_product.serialize())
